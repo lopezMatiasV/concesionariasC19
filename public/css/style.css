@@ -1,0 +1,11 @@
+* {
+    list-style: none;
+}
+.admin .links ul {
+    display: flex;
+    justify-content: space-around;
+}
+
+.admin .links ul i{
+    font-size: 10rem;
+}

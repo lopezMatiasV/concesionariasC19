@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+    <%- include('../partials/head.ejs')  %> 
+<body>
+    <%- include('../partials/header.ejs')  %> 
+    <main class="container">
+        <div class="d-flex">
+            <div class="info">
+                <h2 class="text-center">Sucursal: <%= sucursal.nombre  %> </h2>
+                <p>Direccion: <%= sucursal.direccion %>  </p>
+                <p>Teléfono: <%= sucursal.telefono %> </p>
+                <p>Total de autos: <%= autos.length %> </p>
+            </div>
+            <figure>
+                <img src="/images/<%- sucursal.imagen %>" style="width: 24rem;" alt="...">
+            </figure>
+        </div>
+        <div class="container d-flex flex-wrap justify-content-center">
+			<% autos.forEach(auto => { %>
+			<div class="card" style="width: 14rem">
+				<img
+					src="/images/<%= auto.imagen %> "
+					class="card-img-top"
+					alt="..."
+				/>
+				<div class="card-body">
+					<h5 class="card-title"><%= auto.marca %></h5>
+					<p class="card-text"><%= auto.modelo %></p>
+					<p class="card-text"><%= auto.anio %></p>
+					<p class="card-text"><%= auto.color %></p>
+					<p class="card-text"><%= sucursal.nombre %></p>
+					<a href="/autos/<%= auto.id %> " class="btn btn-primary"
+						>ver mas</a
+					>
+				</div>
+			</div>
+			<% }) %>
+		</div>
+    </main>
+    <%- include('../partials/scripts.ejs')  %> 
+</body>
+</html>

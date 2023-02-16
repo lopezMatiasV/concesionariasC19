@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+	<%- include('../partials/head.ejs') %>
+	<body class="admin">
+		<%- include('../partials/headerAdmin.ejs') %>
+		<main class="container">
+			<h2 class="text-center">Bienvenido Administrador</h2>
+            <hr>
+			<div class="links">
+				<ul>
+					<li>
+						<a href="/admin/sucursales"><i class="fa-solid fa-shop"></i></a>
+					</li>
+					<li>
+						<a href="/admin/autos"><i class="fa-solid fa-car-side"></i></a>
+					</li>
+					<li>
+						<a href="/admin/usuarios"><i class="fa-solid fa-user"></i></a>
+					</li>
+				</ul>
+			</div>
+		</main>
+		<%- include('../partials/scripts.ejs') %>
+	</body>
+</html>

@@ -1,4 +1,6 @@
 const { sucursales, writeJsonSucursales } = require('../data')
+const path = require('path')
+const fs = require('fs')
 
 module.exports = {
     all : (req, res) => {
@@ -42,7 +44,15 @@ module.exports = {
     edit : (req, res) => {
         const { id } = req.params
         const { nombre, direccion, telefono } = req.body;
-        //let sucursal = sucursales.find(sucursal => sucursal.id === +id)
+        let sucursalEditar = sucursales.find(sucursal => sucursal.id === +id)
+        //eliminar imagen anterior
+        if (req.file) {
+            if(fs.existsSync(path.join(__dirname, "../../public/images", sucursalEditar.imagen)) 
+            && sucursalEditar.imagen != "default-image.png" ){
+                fs.unlinkSync(path.join(__dirname, "../../public/images", sucursalEditar.imagen))
+            }
+        }
+
         sucursales.forEach(sucursal => {
             if (sucursal.id === +id) {
                 sucursal.nombre = nombre,
@@ -56,8 +66,20 @@ module.exports = {
     },
     deleteSucursal : (req, res) => {
         const { id } = req.params;
-        const sucursalesAct = sucursales.filter(sucursal => sucursal.id !== +id)
-        writeJsonSucursales(sucursalesAct)
+        
+        let sucursal = sucursales.find(sucursal => sucursal.id === +id)
+            if(fs.existsSync(path.join(__dirname, "../../public/images", sucursal.imagen)) 
+            && sucursal.imagen != "default-image.png" ){
+                fs.unlinkSync(path.join(__dirname, "../../public/images", sucursal.imagen))
+            }
+
+        /* const sucursalesAct = sucursales.filter(sucursal => sucursal.id !== +id)
+        writeJsonSucursales(sucursalesAct)*/
+
+        let sucursalAEliminar = sucursales.indexOf(sucursal)
+        sucursales.splice(sucursalAEliminar, 1)
+        writeJsonSucursales(sucursales)
+        
         res.redirect('/admin/sucursales')
     }
 }

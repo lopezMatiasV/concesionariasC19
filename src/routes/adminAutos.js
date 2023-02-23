@@ -1,13 +1,13 @@
 const router = require('express').Router()
-const { all, formCreate, create, editForm, edit, deleteSucursal} = require('../controllers/adminSucursalesController')
+const { all, formCreate, create, editForm, edit, deleteAuto} = require('../controllers/adminAutosController')
 const upload = require('../middlewares/uploadFile')
 
 router
     .get('/', all )
-    .get('/agregarSucursal', formCreate)
+    .get('/agregarAuto', formCreate)
     .post('/create', upload.single('imagen'), create)
-    .get('/editarSucursal/:id', editForm)
+    .get('/editarAuto/:id', editForm)
     .put('/editar/:id', upload.single('imagen'), edit)
-    .delete('/eliminarSucursal/:id', deleteSucursal)
+    .delete('/eliminarAuto/:id', deleteAuto)
 
 module.exports = router

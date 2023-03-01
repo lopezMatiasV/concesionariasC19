@@ -11,6 +11,7 @@ const sucursalesRouter = require('./routes/sucursales')
 const autoRouter = require('./routes/autos')
 const adminSucursalesRouter = require('./routes/adminSucursales')
 const adminAutosRouter = require('./routes/adminAutos')
+const userRouter = require('./routes/users')
 
 //VISTAS
 app.set("views", path.join(__dirname, "views"));
@@ -28,6 +29,7 @@ app.use('/sucursales', sucursalesRouter)
 app.use('/autos', autoRouter)
 app.use('/admin/sucursales', isAdmin, adminSucursalesRouter)
 app.use('/admin/autos', isAdmin, adminAutosRouter)
+app.use('/users', userRouter)
 
 app.listen(port, () => {
 	console.log(`Servidor levantado en el puerto ${port}\nLink: http://localhost:${port}`);

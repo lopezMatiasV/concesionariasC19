@@ -5,18 +5,12 @@
     <%- include('../partials/header.ejs')  %> 
     <main class="container" style="height: 100vh;">
         <h2 class="text-center"><%= auto.marca %> <%= auto.modelo %></h2>
+        <p>Marca: <%= auto.marca %></p>
         <p>Modelo: <%= auto.modelo %></p>
         <p>Año: <%= auto.anio %></p>
         <p>Color <%= auto.color %></p>
         <p>Sucursal: <%= sucursal.nombre %></p>
         <img src="/images/<%- auto.imagen %>" class="card-img-top" style="width: 24rem;" alt="...">
-        <% if (user == 'admin') { %>
-            <button>editar</button>
-        <% } else if(user == 'user') { %>
-            <button>comprar</button>
-        <% } else { %>
-            <button>loguear</button>
-        <% } %>
     </main>
     
     <%- include('../partials/scripts.ejs')  %> 

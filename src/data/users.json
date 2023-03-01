@@ -1,0 +1,10 @@
+[
+	{
+		"nombre": "vero",
+		"apellido": "vargas",
+		"email": "vero@mail.com",
+		"pass": "123",
+		"avatar": "default-image.png",
+		"rol": "user"
+	}
+]

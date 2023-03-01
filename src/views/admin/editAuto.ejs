@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+    <%- include('../partials/head.ejs')  %> 
+<body>
+    <%- include('../partials/headerAdmin.ejs')  %> 
+    <main class="container">
+        <h3 class="text-center">Editar <%- auto.marca + ' ' + auto.modelo%></h3>
+        <div class="container col-md-4">
+            <form class="row g-3" action="/admin/autos/editar/<%- auto.id %>?_method=PUT" method="POST" enctype="multipart/form-data">
+                <div class="col-12">
+                    <label for="inputName" class="form-label">Marca</label>
+                    <input type="text" class="form-control" id="inputName" name="marca" value="<%= auto.marca %>">
+                </div>
+                <div class="col-12">
+                    <label for="inputAddress" class="form-label">Modelo</label>
+                    <input type="text" class="form-control" id="inputAddress" name="modelo" value="<%= auto.modelo %>">
+                </div>
+                <div class="col-12">
+                    <label for="inputTel" class="form-label">Año</label>
+                    <input type="number" class="form-control" id="inputTel" name="anio" value="<%= auto.anio %>">
+                </div>
+                <div class="col-12">
+                    <label for="inputTel" class="form-label">Sucursal</label>
+                    <select name="sucursal" id="sucursal" class="form-control">
+                        <option value="<%- auto.sucursal %>" selected><%- sucursalAuto.nombre %></option>
+                        <% sucursales.forEach(({id, nombre}) => { %>
+                            <% if (sucursalAuto.id != id) { %>
+                                <option value="<%= id %>"><%= nombre %></option>
+                            <% } %>
+                        <% }) %>
+                    </select>
+                </div>
+                <div class="col-12">
+                    <label for="inputTel" class="form-label">Color</label>
+                    <input type="text" class="form-control" id="inputTel" name="color" value="<%= auto.color %>">
+                </div>
+                <!-- Image preview -->
+                <div id="imagePreview">
+                </div>
+                
+                <div class="col-12">
+                    <figure class="text-center">
+                        <img src="/images/<%= auto.imagen %>" alt="" width="200px" height="200px">
+                    </figure>
+                    <label for="inputFile" class="form-label">Imagen</label>
+                    <input type="file" class="form-control" id="inputFile" name="imagen" onchange="return fileValidation()"/>
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">AGREGAR</button>
+                </div>
+            </form>
+        </div>
+    </main>
+    <script src="/js/imagePreview.js"></script>
+    <%- include('../partials/scripts.ejs')  %> 
+</body>
+</html>

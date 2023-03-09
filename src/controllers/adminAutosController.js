@@ -7,12 +7,14 @@ module.exports = {
 		res.render("admin/adminAutos", {
 			title: "Admin autos",
 			autos,
+			session: req.session,
 		});
 	},
 	formCreate: (req, res) => {
 		res.render("admin/agregarAuto", {
 			title: "agregar Auto",
 			sucursales,
+			session: req.session,
 		});
 	},
 	create: (req, res) => {
@@ -46,6 +48,7 @@ module.exports = {
 			sucursales,
 			sucursalAuto,
 			title: auto.nombre,
+			session: req.session,
 		});
 	},
 	edit: (req, res) => {

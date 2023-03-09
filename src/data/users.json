@@ -1,10 +1,1 @@
-[
-	{
-		"nombre": "vero",
-		"apellido": "vargas",
-		"email": "vero@mail.com",
-		"pass": "123",
-		"avatar": "default-image.png",
-		"rol": "user"
-	}
-]
+[{"nombre":"vero","apellido":"vargas","email":"vero@mail.com","pass":"$2a$10$qgX4jCCbT89ByhI74SLdN.ngsiN1QEKItEXPY0o82ZBKdWXqYem.m","avatar":"default-image.png","rol":"admin"},{"nombre":"matias","apellido":"adf","email":"asd@asd.asd","pass":"$2a$10$qgX4jCCbT89ByhI74SLdN.ngsiN1QEKItEXPY0o82ZBKdWXqYem.m","avatar":"default-image.png","rol":"user"},{"nombre":"","apellido":"","email":"","pass":"$2a$10$u7PPq3kSkELnTK65lqaGaOZqRey1//JRS7OH65ets.CHXdtQkoqB2","avatar":"default-image.png","rol":"user"}]

@@ -4,7 +4,8 @@ module.exports = {
     sucursales : (req, res) => {
         res.render('sucursales/sucursales', {
             title: 'Sucursales',
-            sucursales
+            sucursales,
+            session: req.session,
         })
     },
     sucursal : (req, res) => {
@@ -18,7 +19,8 @@ module.exports = {
         res.render('sucursales/sucursal', {
             sucursal,
             title: sucursal.nombre,
-            autos : autosSucursal
+            autos : autosSucursal,
+            session: req.session
         })
     }
 }

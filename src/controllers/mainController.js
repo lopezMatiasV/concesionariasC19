@@ -5,7 +5,6 @@ module.exports = {
         res.render('others/home', {
             title: 'Practica c19',
             sucursales,
-            session: req.session,
         })
     },
     search: (req, res) => {
@@ -17,13 +16,11 @@ module.exports = {
             autos : autosSearch,
             search,
             title : 'Resultado de la busqueda',
-            session: req.session
         })
     },
     admin :(req, res) => {
         res.render('admin/adminIndex', {
             title : 'Admin',
-            session: req.session
         })
     }
 }

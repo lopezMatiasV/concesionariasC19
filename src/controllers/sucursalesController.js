@@ -5,7 +5,6 @@ module.exports = {
         res.render('sucursales/sucursales', {
             title: 'Sucursales',
             sucursales,
-            session: req.session,
         })
     },
     sucursal : (req, res) => {
@@ -20,7 +19,6 @@ module.exports = {
             sucursal,
             title: sucursal.nombre,
             autos : autosSucursal,
-            session: req.session
         })
     }
 }

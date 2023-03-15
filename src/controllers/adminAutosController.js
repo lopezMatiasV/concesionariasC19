@@ -1,4 +1,5 @@
 const { autos, sucursales, writeJsonAutos } = require("../data");
+const { validationResult } = require("express-validator");
 const path = require("path");
 const fs = require("fs");
 
@@ -7,32 +8,48 @@ module.exports = {
 		res.render("admin/adminAutos", {
 			title: "Admin autos",
 			autos,
-			session: req.session,
 		});
 	},
 	formCreate: (req, res) => {
 		res.render("admin/agregarAuto", {
 			title: "agregar Auto",
 			sucursales,
-			session: req.session,
 		});
 	},
 	create: (req, res) => {
-		let lastId = 0;
-		autos.forEach((auto) => {
-			if (auto.id > lastId) {
-				lastId = auto.id;
+		let errors = validationResult(req);
+		if (errors.isEmpty()) {
+			let lastId = 0;
+			autos.forEach((auto) => {
+				if (auto.id > lastId) {
+					lastId = auto.id;
+				}
+			});
+			const newAuto = {
+				id: lastId + 1,
+				...req.body,
+				sucursal : +req.body.sucursal,
+				imagen: req.files.length !== 0 ? req.files.map(file => file.filename) : ["default-image.png"],
+			};
+			autos.push(newAuto);
+			writeJsonAutos(autos);
+			res.redirect(`/admin/autos#${newAuto.id}`);
+		} else {
+			if (req.files) {
+				req.files.forEach(file => {
+					fs.unlinkSync(
+						path.join(__dirname, "../../public/images", file.filename)
+					);
+				})
 			}
-		});
-		const newAuto = {
-			id: lastId + 1,
-			...req.body,
-            sucursal : +req.body.sucursal,
-			imagen: req.file ? req.file.filename : "default-image.png",
-		};
-		autos.push(newAuto);
-		writeJsonAutos(autos);
-		res.redirect(`/admin/autos#${newAuto.id}`);
+			res.render("admin/agregarAuto", {
+				title: "agregar Auto",
+				sucursales,
+				errors: errors.mapped(),
+				old: req.body,
+				oldImage: req.files
+			});
+		}
 	},
 	editForm: (req, res) => {
 		const { id } = req.params;
@@ -48,25 +65,28 @@ module.exports = {
 			sucursales,
 			sucursalAuto,
 			title: auto.nombre,
-			session: req.session,
 		});
 	},
 	edit: (req, res) => {
+		let errors = validationResult(req);
+		if (errors.isEmpty()) {
 		const { id } = req.params;
 		const { marca, modelo, anio, color, sucursal } = req.body;
 		let auto = autos.find((auto) => auto.id === +id);
 		//eliminar imagen anterior
-		if (req.file) {
-			if (
-				fs.existsSync(
-					path.join(__dirname, "../../public/images", auto.imagen)
-				) &&
-				auto.imagen != "default-image.png"
-			) {
-				fs.unlinkSync(
-					path.join(__dirname, "../../public/images", auto.imagen)
-				);
-			}
+		if (req.files) {
+			auto.imagen.forEach(image => {
+				if (
+					fs.existsSync(
+						path.join(__dirname, "../../public/images", image)
+					) &&
+					image != "default-image.png"
+				) {
+					fs.unlinkSync(
+						path.join(__dirname, "../../public/images", image)
+					);
+				}
+			})
 		}
 
 		autos.forEach( auto => {
@@ -76,28 +96,57 @@ module.exports = {
 				auto.anio = anio,
 				auto.color = color,
                 auto.sucursal = +sucursal,
-				auto.imagen = req.file?.filename ?? auto.imagen;
+				auto.imagen = req.files.length !== 0 ? req.files.map(file => file.filename) : auto.imagen
 			}
 		});
 		writeJsonAutos(autos);
 		res.redirect(`/admin/autos#${auto.id}`);
+	} else {
+		if (req.files) {
+			req.files.forEach(({filename}) => {
+				fs.unlinkSync(
+					path.join(__dirname, "../../public/images", filename)
+				);
+			})
+		}
+		const { id } = req.params;
+		const auto = autos.find((auto) => auto.id === +id);
+		const sucursalAuto = sucursales.find(
+			(sucursal) => sucursal.id == auto.sucursal
+		);
+		if (!auto) {
+			return res.send("Nop existe ese auto");
+		}
+		res.render("admin/editAuto", {
+			auto,
+			sucursales,
+			sucursalAuto,
+			title: auto.nombre,
+			errors: errors.mapped(),
+			old: req.body,
+		});
+	}
 	},
 	deleteAuto: (req, res) => {
         const { id } = req.params;
         
         let auto = autos.find(auto => auto.id === +id)
-            if(fs.existsSync(path.join(__dirname, "../../public/images", auto.imagen)) 
-            && autos.imagen != "default-image.png" ){
-                fs.unlinkSync(path.join(__dirname, "../../public/images", auto.imagen))
-            }
-
-        /* const autosAct = autos.filter(auto => auto.id !== +id)
-        writeJsonAutos(autosAct) */
+		auto.imagen.forEach(image => {
+			if (
+				fs.existsSync(
+					path.join(__dirname, "../../public/images", image)
+				) &&
+				image != "default-image.png"
+			) {
+				fs.unlinkSync(
+					path.join(__dirname, "../../public/images", image)
+				);
+			}
+		})
 
         let autoAEliminar = autos.indexOf(auto)
         autos.splice(autoAEliminar, 1)
         writeJsonAutos(autos)
-        
-        res.redirect(`/admin/autos#${auto.id}`)
+        res.redirect(`/admin/autos#${auto.id - 1}`)
     },
 };

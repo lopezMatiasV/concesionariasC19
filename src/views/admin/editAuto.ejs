@@ -9,7 +9,8 @@
             <form class="row g-3" action="/admin/autos/editar/<%- auto.id %>?_method=PUT" method="POST" enctype="multipart/form-data">
                 <div class="col-12">
                     <label for="inputName" class="form-label">Marca</label>
-                    <input type="text" class="form-control" id="inputName" name="marca" value="<%= auto.marca %>">
+                    <input type="text" class="form-control" id="inputName" name="marca" value="<%= locals.old?.marca ?? auto.marca %>">
+                    <small class="text-danger"><%= locals.errors?.marca?.msg ?? "" %></small>
                 </div>
                 <div class="col-12">
                     <label for="inputAddress" class="form-label">Modelo</label>
@@ -38,12 +39,13 @@
                 <div id="imagePreview">
                 </div>
                 
-                <div class="col-12">
-                    <figure class="text-center">
-                        <img src="/images/<%= auto.imagen %>" alt="" width="200px" height="200px">
-                    </figure>
-                    <label for="inputFile" class="form-label">Imagen</label>
-                    <input type="file" class="form-control" id="inputFile" name="imagen" onchange="return fileValidation()"/>
+                <div class="container d-flex flex-wrap justify-content-center" style="gap:20px">
+                    <% auto.imagen.forEach((image,i) => { %>
+                        <figure class="text-center">
+                            <img src="/images/<%= image %>" alt="" width="70px" height="70px">
+                        </figure>
+                    <% }) %>
+                    <input type="file" multiple class="form-control" id="inputFile" name="imagen" onchange="return fileValidation()"/>
                 </div>
                 <div class="col-12">
                     <button type="submit" class="btn btn-primary">AGREGAR</button>
@@ -51,7 +53,6 @@
             </form>
         </div>
     </main>
-    <script src="/js/imagePreview.js"></script>
     <%- include('../partials/scripts.ejs')  %> 
 </body>
 </html>

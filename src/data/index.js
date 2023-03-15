@@ -1,16 +1,17 @@
 const fs = require('fs')
+const path = require('path')
 
 module.exports = {
-    sucursales : JSON.parse(fs.readFileSync('./src/data/sucursales.json', 'utf-8')),
-    autos : JSON.parse(fs.readFileSync('./src/data/autos.json', 'utf-8')),
-    users : JSON.parse(fs.readFileSync('./src/data/users.json', 'utf-8')),
+    sucursales : JSON.parse(fs.readFileSync(path.join(__dirname, 'sucursales.json'), 'utf-8')),
+    autos : JSON.parse(fs.readFileSync(path.join(__dirname, 'autos.json'), 'utf-8')),
+    users : JSON.parse(fs.readFileSync(path.join(__dirname, 'users.json'), 'utf-8')),
     writeJsonSucursales : (data) => {
-        fs.writeFileSync('./src/data/sucursales.json', JSON.stringify(data), 'utf-8')
+        fs.writeFileSync(path.join(__dirname, 'sucursales.json'), JSON.stringify(data), 'utf-8')
     },
     writeJsonAutos : (data) => {
-        fs.writeFileSync('./src/data/autos.json', JSON.stringify(data), 'utf-8')
+        fs.writeFileSync(path.join(__dirname, 'autos.json'), JSON.stringify(data), 'utf-8')
     },
     writeJsonUsers : (data) => {
-        fs.writeFileSync('./src/data/users.json', JSON.stringify(data), 'utf-8')
+        fs.writeFileSync(path.join(__dirname, 'users.json'), JSON.stringify(data), 'utf-8')
     },
 }

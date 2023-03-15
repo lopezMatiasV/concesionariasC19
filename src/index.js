@@ -5,15 +5,10 @@ const port = process.env.PORT || 3000;
 const methodOverride = require("method-override");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
-const { isAdmin } = require("./middlewares/user");
+const { isAdmin, localsSession, cookieCheck } = require("./middlewares/user");
 
 //ENRUTADORES
-const homeRouter = require("./routes/main");
-const sucursalesRouter = require("./routes/sucursales");
-const autoRouter = require("./routes/autos");
-const adminSucursalesRouter = require("./routes/adminSucursales");
-const adminAutosRouter = require("./routes/adminAutos");
-const userRouter = require("./routes/users");
+const { homeRouter, sucursalesRouter, autoRouter, adminAutosRouter, adminSucursalesRouter, userRouter } = require('./routes')
 
 //VISTAS
 app.set("views", path.join(__dirname, "views"));
@@ -33,6 +28,8 @@ app.use(
 		cookie: {},
 	})
 );
+app.use(cookieCheck)
+app.use(localsSession)
 
 //RUTAS
 app.use("/", homeRouter);

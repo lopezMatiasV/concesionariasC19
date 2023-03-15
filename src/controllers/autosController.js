@@ -1,12 +1,11 @@
 const { sucursales, autos } = require("../data");
-const user = ''
+
 module.exports = {
 	autos: (req, res) => {
         //return res.send(autos)
 		res.render("autos/autos", {
 			title: "Todos nuestros autos",
 			autos,
-			session: req.session,
 		});
 	},
 	auto: (req, res) => {
@@ -16,9 +15,7 @@ module.exports = {
 		res.render("autos/autoDetail", {
 			auto,
 			sucursal,
-			user,
 			title : auto.marca + ' ' + auto.modelo,
-			session: req.session,
 		});
 	},
 };

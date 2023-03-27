@@ -1,6 +1,6 @@
 [
 	{
-		"id" : 1,
+		"id": 1,
 		"nombre": "vero",
 		"apellido": "vargas",
 		"email": "vero@mail.com",
@@ -9,12 +9,25 @@
 		"rol": "admin"
 	},
 	{
-		"id" : 2,
+		"id": 2,
 		"nombre": "matias",
 		"apellido": "adf",
 		"email": "asd@asd.asd",
 		"pass": "$2a$10$qgX4jCCbT89ByhI74SLdN.ngsiN1QEKItEXPY0o82ZBKdWXqYem.m",
-		"avatar": "default-image.png",
-		"rol": "user"
+		"avatar": "1679520161348_img_.jpg",
+		"rol": "user",
+		"direccion": "12334we",
+		"telefono": "12314"
+	},
+	{
+		"id": 3,
+		"nombre": "matias",
+		"apellido": "lopez",
+		"email": "matias@gmail.com",
+		"pass": "$2a$10$YhLYZsNkJlqsLs6z96xyIOmmcbPTsbCBiUC3VNi/ToK7KdXZDRvP2",
+		"avatar": "1679520085931_img_.png",
+		"rol": "admin",
+		"direccion": "123124",
+		"telefono": "1231234"
 	}
 ]

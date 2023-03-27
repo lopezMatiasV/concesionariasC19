@@ -27,9 +27,18 @@ module.exports = {
 				avatar: req.file?.filename ?? "default-image.png",
 				rol: "user",
 			};
+			/* levanto sesion al registrar */
+			req.session.user = {
+				id : newUser.id,
+				nombre : newUser.nombre,
+				apellido : newUser.apellido,
+				rol : newUser.rol,
+				avatar : newUser.avatar,
+			};
+
 			users.push(newUser);
 			writeJsonUsers(users);
-			res.redirect("/users/login");
+			res.redirect("/");
 		} else {
             res.send(errors)
         }
@@ -77,4 +86,19 @@ module.exports = {
 			title : `Perfil de ${user.nombre}`,
 		})
 	},
+	editPerfil : (req, res) => {
+		let { id } = req.params
+		let user = users.find(user => user.id == id)
+		users.forEach(user => {
+			if (user.id == id) {
+				user.nombre = req.body.nombre,
+				user.apellido = req.body.apellido,
+				user.direccion = req.body.direccion,
+				user.telefono = req.body.telefono,
+				user.avatar = req.file ? req.file.filename : user.avatar
+			}
+		})
+		writeJsonUsers(users);
+		res.redirect('/users/perfil');
+	}
 };

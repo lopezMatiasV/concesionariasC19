@@ -1,24 +1,30 @@
-const { sucursales, autos } = require('../data')
+const { Sucursal } = require('../database/models')
 
 module.exports = {
     sucursales : (req, res) => {
-        res.render('sucursales/sucursales', {
-            title: 'Sucursales',
-            sucursales,
+        Sucursal.findAll()
+        .then(sucursales =>{
+            res.render('sucursales/sucursales', {
+                title: 'Sucursales',
+                sucursales,
+            })
+        })
+        .catch(error => {
+            console.log(error);
+            res.send('Hubo un error')
         })
     },
     sucursal : (req, res) => {
         let id = +req.params.id
-        let sucursal = sucursales.find(sucursal => sucursal.id === +id)
-        let autosSucursal = autos.filter(auto => auto.sucursal === +id)
-        
-        if (!sucursal) {
-            return res.send('Nop existe esa sucursal')
-        }
-        res.render('sucursales/sucursal', {
-            sucursal,
-            title: sucursal.nombre,
-            autos : autosSucursal,
+        Sucursal.findByPk(id, {
+            include:[{association : 'autos', include : {association : 'imagenes'}}]
+        })
+        .then(sucursal => {
+            res.render('sucursales/sucursal', {
+                sucursal,
+                title: sucursal.nombre,
+                autos : sucursal.autos,
+            })
         })
     }
 }

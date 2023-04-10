@@ -8,10 +8,10 @@
         <p>Marca: <%= auto.marca %></p>
         <p>Modelo: <%= auto.modelo %></p>
         <p>Año: <%= auto.anio %></p>
-        <p>Color <%= auto.color %></p>
+        <p>Color: <%= auto.color %></p>
         <p>Sucursal: <%= sucursal.nombre %></p>
-        <% auto.imagen.forEach(image => { %>
-            <img src="/images/<%- image %>" class="card-img-top" style="width: 24rem;" alt="...">
+        <% auto.imagenes.forEach(image => { %>
+            <img src="/images/<%- image.file %>" class="card-img-top" style="width: 24rem;" alt="...">
         <% }) %>
         
     </main>

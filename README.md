@@ -3,3 +3,4 @@
 ### Para inicializar: 
 * Luego de clonar el repositorio, realizar un npm install dentro de la carpeta del proyecto.
 * Luego para levantar el proyecto utilizando el comando npm start.
+* Para utilizar la db utilizar el script que esta en la carpeta data, dentro de src.

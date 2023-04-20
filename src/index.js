@@ -35,8 +35,8 @@ app.use(localsSession)
 app.use("/", homeRouter);
 app.use("/sucursales", sucursalesRouter);
 app.use("/autos", autoRouter);
-app.use("/admin/sucursales", isAdmin, adminSucursalesRouter);
-app.use("/admin/autos", isAdmin, adminAutosRouter);
+app.use("/admin/sucursales", /* isAdmin, */ adminSucursalesRouter);
+app.use("/admin/autos", /* isAdmin, */ adminAutosRouter);
 app.use("/users", userRouter);
 
 app.listen(port, () => {

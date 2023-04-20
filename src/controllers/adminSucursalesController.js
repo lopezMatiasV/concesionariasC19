@@ -1,85 +1,117 @@
-const { sucursales, writeJsonSucursales } = require('../data')
-const path = require('path')
-const fs = require('fs')
+const { Sucursal, Auto, Imagen } = require("../database/models");
+const path = require("path");
+const fs = require("fs");
 
 module.exports = {
-    all : (req, res) => {
-        res.render('admin/adminSucursales', {
-            title : 'Admin',
-            sucursales,
-        })
-    }, 
-    formCreate : (req, res) => {
-        res.render('admin/agregarSucursal', {
-            title : 'agregar Sucursal',
-        })
-    },
-    create : (req, res) => {
-        let lastId = 0;
-        sucursales.forEach(sucursal => {
-            if(sucursal.id > lastId){
-                lastId = sucursal.id
-            }
-        })
-        const newSucursal = {
-            id : lastId + 1,
-            ...req.body,
-            imagen : req.file ? req.file.filename : 'default-image.png', 
-        }
-        sucursales.push(newSucursal)
-        writeJsonSucursales(sucursales)
-        res.redirect('/admin/sucursales')
-    },
-    editForm : (req, res) => {
+	all: (req, res) => {
+		Sucursal.findAll()
+			.then((sucursales) => {
+				//return res.send(sucursales)
+				res.render("admin/adminSucursales", {
+					title: "Admin",
+					sucursales,
+				});
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	},
+	formCreate: (req, res) => {
+		res.render("admin/agregarSucursal", {
+			title: "agregar Sucursal",
+		});
+	},
+	create: (req, res) => {
+		Sucursal.create({
+			...req.body,
+			imagen: req.file?.filename ?? "default-image.png",
+		})
+			.then((sucursal) => {
+				res.redirect("/admin/sucursales");
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	},
+	editForm: (req, res) => {
+		const { id } = req.params;
+		Sucursal.findByPk(id).then((sucursal) => {
+			res.render("admin/editarSucursal", {
+				sucursal,
+				title: sucursal.nombre,
+			});
+		});
+	},
+	edit: (req, res) => {
+		const { id } = req.params;
+		Sucursal.findByPk(id)
+			.then((sucursal) => {
+				if (req.file) {
+					if (
+						fs.existsSync(
+							path.join(__dirname, "../../public/images", sucursal.imagen)
+						) &&
+						sucursal.imagen != "default-image.png"
+					) {
+						fs.unlinkSync(
+							path.join(__dirname, "../../public/images", sucursal.imagen)
+						);
+					}
+				}
+				Sucursal.update(
+					{
+						...req.body,
+						imagen: req.file?.filename ?? sucursal.imagen,
+					},
+					{
+						where: { id },
+					}
+				).then(() => {
+					res.redirect("/admin/sucursales");
+				});
+			})
+			.catch((errFind) => {
+				console.log(errFind);
+			});
+	},
+	deleteSucursal: (req, res) => {
         const { id } = req.params
-        const sucursal = sucursales.find(sucursal => sucursal.id === +id)
-        if (!sucursal) {
-            return res.send('Nop existe esa sucursal')
-        }
-        res.render('admin/editarSucursal', {
-            sucursal,
-            title: sucursal.nombre,
+		Auto.findAll({
+			where: { sucursalId: req.params.id }, include : ['imagenes']
+		})
+		.then((autos) => {
+            autos.forEach(auto => {
+                auto.imagenes.forEach(({file}) => {
+                    if (fs.existsSync(path.join(__dirname, "../../public/images", file)) && file !== "default-image.png"){
+                        fs.unlinkSync( path.join(__dirname, "../../public/images", file))
+                    }
+                    Imagen.destroy({
+                        where: { autoId: auto.id },
+                    })
+                    .then(() => {}).catch(error => console.log(error))
+                });
+            })
+            Auto.destroy({
+                where: { sucursalId: id },
+            })
+            .then(() => {
+                Sucursal.findByPk( id )
+                    .then((sucursal) => {
+                        if (fs.existsSync(path.join(__dirname, "../../public/images", sucursal.imagen)) && sucursal.imagen !== "default-image.png") {
+                            fs.unlinkSync(path.join(__dirname, "../../public/images", sucursal.imagen));
+                        }
+                        Sucursal.destroy({
+                            where : { id }
+                        })
+                        .then(() => {
+                            res.redirect("/admin/sucursales");
+                        })
+                        .catch(err => console.log(err))
+                    })
+                    .catch(errors => console.log(errors));
+            })
+            .catch(errors => console.log(errors));
         })
-    },
-    edit : (req, res) => {
-        const { id } = req.params
-        const { nombre, direccion, telefono } = req.body;
-        let sucursalEditar = sucursales.find(sucursal => sucursal.id === +id)
-        //eliminar imagen anterior
-        if (req.file) {
-            if(fs.existsSync(path.join(__dirname, "../../public/images", sucursalEditar.imagen)) 
-            && sucursalEditar.imagen != "default-image.png" ){
-                fs.unlinkSync(path.join(__dirname, "../../public/images", sucursalEditar.imagen))
-            }
-        }
-
-        sucursales.forEach(sucursal => {
-            if (sucursal.id === +id) {
-                sucursal.nombre = nombre,
-                sucursal.direccion = direccion,
-                sucursal.telefono = telefono, 
-                sucursal.imagen = req.file?.filename ?? sucursal.imagen
-            }
-        })
-        writeJsonSucursales(sucursales)
-        res.redirect('/admin/sucursales')
-    },
-    deleteSucursal : (req, res) => {
-        const { id } = req.params;
-        
-        let sucursal = sucursales.find(sucursal => sucursal.id === +id)
-            if(fs.existsSync(path.join(__dirname, "../../public/images", sucursal.imagen)) 
-            && sucursal.imagen != "default-image.png" ){
-                fs.unlinkSync(path.join(__dirname, "../../public/images", sucursal.imagen))
-            }
-
-        /* const sucursalesAct = sucursales.filter(sucursal => sucursal.id !== +id)
-        writeJsonSucursales(sucursalesAct)*/
-
-        let sucursalAEliminar = sucursales.indexOf(sucursal)
-        sucursales.splice(sucursalAEliminar, 1)
-        writeJsonSucursales(sucursales)
-        
-        res.redirect('/admin/sucursales')
-    }
-}
+        .catch(error => console.log(error));
+	},
+};

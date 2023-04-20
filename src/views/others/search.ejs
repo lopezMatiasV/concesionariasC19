@@ -15,13 +15,13 @@
          
                 <% autos.forEach( auto => { %>
                     <div class="card m-2 text-black bg-light" style="width: 16rem;">
-                        <img src="/images/<%- auto.imagen %>" class="card-img-top" alt="...">
+                        <img src="/images/<%- auto.imagenes[0].file %>" class="card-img-top" alt="...">
                         <div class="card-body">
                         <h5 class="card-title"><%= auto.marca.toUpperCase() %></h5>
                         <p class="card-text">Modelo: <%= auto.modelo %></p>
                         <p class="card-text">Año: <%= auto.anio %></p>
                         <p class="card-text">Color: <%= auto.color %></p>
-                        <a href="/autos/detalle/<%- auto.id %>" class="btn btn-primary">Detalle</a>
+                        <a href="/autos/<%- auto.id %>" class="btn btn-primary">Detalle</a>
                         </div>
                     </div>
                 <% }) %>

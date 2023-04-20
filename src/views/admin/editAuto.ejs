@@ -22,8 +22,8 @@
                 </div>
                 <div class="col-12">
                     <label for="inputTel" class="form-label">Sucursal</label>
-                    <select name="sucursal" id="sucursal" class="form-control">
-                        <option value="<%- auto.sucursal %>" selected><%- sucursalAuto.nombre %></option>
+                    <select name="sucursalId" id="sucursal" class="form-control">
+                        <option value="<%- auto.sucursalId %>" selected><%- sucursalAuto.nombre %></option>
                         <% sucursales.forEach(({id, nombre}) => { %>
                             <% if (sucursalAuto.id != id) { %>
                                 <option value="<%= id %>"><%= nombre %></option>
@@ -40,15 +40,15 @@
                 </div>
                 
                 <div class="container d-flex flex-wrap justify-content-center" style="gap:20px">
-                    <% auto.imagen.forEach((image,i) => { %>
+                    <% auto.imagenes.forEach(imagen => { %>
                         <figure class="text-center">
-                            <img src="/images/<%= image %>" alt="" width="70px" height="70px">
+                            <img src="/images/<%= imagen.file %>" alt="" width="70px" height="70px">
                         </figure>
                     <% }) %>
-                    <input type="file" multiple class="form-control" id="inputFile" name="imagen" onchange="return fileValidation()"/>
+                    <input type="file" multiple class="form-control" id="inputFile" name="imagen"/>
                 </div>
                 <div class="col-12">
-                    <button type="submit" class="btn btn-primary">AGREGAR</button>
+                    <button type="submit" class="btn btn-primary">Editar</button>
                 </div>
             </form>
         </div>

@@ -1,4 +1,4 @@
-const { sucursales, autos } = require('../data')
+
 const { Sucursal, Auto, Sequelize } = require('../database/models')
 
 module.exports = {

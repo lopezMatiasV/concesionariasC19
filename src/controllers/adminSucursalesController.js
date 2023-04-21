@@ -1,6 +1,7 @@
 const { Sucursal, Auto, Imagen } = require("../database/models");
 const path = require("path");
 const fs = require("fs");
+const { validationResult } = require("express-validator");
 
 module.exports = {
 	all: (req, res) => {
@@ -22,16 +23,25 @@ module.exports = {
 		});
 	},
 	create: (req, res) => {
-		Sucursal.create({
-			...req.body,
-			imagen: req.file?.filename ?? "default-image.png",
-		})
+		const errors = validationResult(req);
+		if (errors.isEmpty()) {
+			Sucursal.create({
+				...req.body,
+				imagen: req.file?.filename ?? "default-image.png",
+			})
 			.then((sucursal) => {
 				res.redirect("/admin/sucursales");
-			})
-			.catch((error) => {
-				console.log(error);
+			}).catch((error) => console.log(error));
+		} else {
+			if (req.file) {
+				fs.unlinkSync( path.join(__dirname, "../../public/images", req.file.filename))
+			}
+			res.render("admin/agregarSucursal", {
+				title: "agregar Sucursal",
+				errors : errors.mapped(),
+				old : req.body,
 			});
+		}
 	},
 	editForm: (req, res) => {
 		const { id } = req.params;
@@ -43,7 +53,9 @@ module.exports = {
 		});
 	},
 	edit: (req, res) => {
+		const errors = validationResult(req);
 		const { id } = req.params;
+		if (errors.isEmpty()) {
 		Sucursal.findByPk(id)
 			.then((sucursal) => {
 				if (req.file) {
@@ -73,11 +85,24 @@ module.exports = {
 			.catch((errFind) => {
 				console.log(errFind);
 			});
+		} else {
+			if (req.file) {
+				fs.unlinkSync( path.join(__dirname, "../../public/images", req.file.filename))
+			}
+			Sucursal.findByPk(id).then((sucursal) => {
+				res.render("admin/editarSucursal", {
+					sucursal,
+					title: sucursal.nombre,
+					errors : errors.mapped(),
+					old : req.body,
+				});
+			});
+		}
 	},
 	deleteSucursal: (req, res) => {
-        const { id } = req.params
+        const { id } = req.params;
 		Auto.findAll({
-			where: { sucursalId: req.params.id }, include : ['imagenes']
+			where: { sucursalId: req.params.id }, include : ['imagenes'],
 		})
 		.then((autos) => {
             autos.forEach(auto => {
@@ -88,7 +113,7 @@ module.exports = {
                     Imagen.destroy({
                         where: { autoId: auto.id },
                     })
-                    .then(() => {}).catch(error => console.log(error))
+                    .then(() => {}).catch(error => console.log(error));
                 });
             })
             Auto.destroy({
@@ -106,7 +131,7 @@ module.exports = {
                         .then(() => {
                             res.redirect("/admin/sucursales");
                         })
-                        .catch(err => console.log(err))
+                        .catch(err => console.log(err));
                     })
                     .catch(errors => console.log(errors));
             })

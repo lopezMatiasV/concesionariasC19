@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const { all, formCreate, create, editForm, edit, deleteAuto } = require('../controllers/adminAutosController')
+const { all, formCreate, create, editForm, edit, deleteAuto, searchAuto } = require('../controllers/adminAutosController')
 const upload = require('../middlewares/uploadFile')
 const autosValidator = require('../validations/autosValidator')
 
@@ -11,5 +11,6 @@ router
     .get('/editarAuto/:id', editForm)
     .put('/editar/:id', upload.array('imagen'), autosValidator ,edit)
     .delete('/eliminarAuto/:id', deleteAuto)
+    .get('/search', searchAuto)
 
 module.exports = router

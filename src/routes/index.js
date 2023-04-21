@@ -3,6 +3,7 @@ const sucursalesRouter = require("./sucursales");
 const autoRouter = require("./autos");
 const adminSucursalesRouter = require("./adminSucursales");
 const adminAutosRouter = require("./adminAutos");
+const adminUsuariosRouter = require('./adminUsuarios');
 const userRouter = require("./users");
 
 module.exports = {
@@ -11,5 +12,6 @@ module.exports = {
 	autoRouter,
 	adminSucursalesRouter,
 	adminAutosRouter,
+	adminUsuariosRouter,
 	userRouter,
 };

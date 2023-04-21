@@ -1,5 +1,5 @@
 const { validationResult } = require("express-validator");
-const { Auto, Sucursal, Imagen } = require("../database/models");
+const { Auto, Sucursal, Imagen, Sequelize } = require("../database/models");
 const fs = require("fs");
 const path = require("path");
 
@@ -172,5 +172,24 @@ module.exports = {
             .catch(errorImageDestroy => console.log(errorImageDestroy))
         })
         .catch(errorFind => console.log(errorFind));
+    },
+    searchAuto : (req, res) => {
+        let busqueda = req.query.search.toLowerCase()
+        Auto.findAll({
+            where: {
+                [Sequelize.Op.or]: [
+                    { marca: {[Sequelize.Op.substring]: busqueda}},
+                    { modelo: {[Sequelize.Op.substring]: busqueda}},
+                    { color: {[Sequelize.Op.substring]: busqueda}},
+                    { anio: {[Sequelize.Op.substring]: busqueda}}
+                ]
+            },
+        })
+        .then(autos => {
+            res.render('admin/adminAutos',{
+                title : `Autos filtrados por ${busqueda}`,
+                autos,
+            })
+        })
     }
 }

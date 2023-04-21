@@ -5,7 +5,7 @@
     <main class="container-fluid">
       <%- include('../partials/headerAdmin.ejs') %>
       <br>
-      <form class="d-flex" action="/admin/users/search" method="GET">
+      <form class="d-flex" action="/admin/usuarios/search" method="GET">
         <select name="search" id="">
           <option value="user">User</option>
           <option value="admin">Admin</option>
@@ -27,13 +27,13 @@
               </tr>
             </thead>
             <tbody>
-              <% users.forEach(({id, nombre, apellido, email, rol}) => { %>
+              <% usuarios.forEach(({id, nombre, apellido, email, rol}) => { %>
               <tr id="<%= id %>">
                 <td><%= id %> </td>
                 <td><%= nombre %> </td>
                 <td><%= apellido %></td>
                 <td><%= email %> </td>
-                <form action="/admin/users/<%= id %>?_method=PUT" method="POST">
+                <form action="/admin/usuarios/<%= id %>?_method=PUT" method="POST">
                   <td>
                     <select  name="rol">
                       <option selected hidden value="<%= rol %>"><%= rol %></option>
@@ -42,7 +42,7 @@
                     </select>
                     <button type="submit" style="border: none; background: none;"><ion-icon name="pencil-outline"></ion-icon></td>
                 </form>
-                <form action="/admin/users/<%= id %>?_method=DELETE" method="POST">
+                <form action="/admin/usuarios/<%= id %>?_method=DELETE" method="POST">
                   <td><button type="submit" style="border: none; background: none;"><ion-icon name="trash-outline"></ion-icon></td>
                 </form>
               </tr>

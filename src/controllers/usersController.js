@@ -1,4 +1,4 @@
-const { users, writeJsonUsers } = require("../data");
+const { Usuario } = require('../database/models')
 const { validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 
@@ -11,36 +11,33 @@ module.exports = {
 	processRegister: (req, res) => {
 		const errors = validationResult(req);
 		if (errors.isEmpty()) {
-			let lastId = 0;
-			users.forEach((user) => {
-				if (user.id > lastId) {
-					lastId = user.id;
-				}
-			});
 			const { nombre, apellido, email, pass } = req.body;
-			const newUser = {
-				id : lastId + 1,
+			Usuario.create({
 				nombre,
 				apellido,
 				email,
 				pass: bcrypt.hashSync(pass, 10),
 				avatar: req.file?.filename ?? "default-image.png",
 				rol: "user",
-			};
-			/* levanto sesion al registrar */
-			req.session.user = {
-				id : newUser.id,
-				nombre : newUser.nombre,
-				apellido : newUser.apellido,
-				rol : newUser.rol,
-				avatar : newUser.avatar,
-			};
-
-			users.push(newUser);
-			writeJsonUsers(users);
-			res.redirect("/");
+			})
+			.then(usuario => {
+				/* levanto sesion al registrar */
+				req.session.user = {
+					id : usuario.id,
+					nombre : usuario.nombre,
+					apellido : usuario.apellido,
+					rol : usuario.rol,
+					avatar : usuario.avatar,
+				};
+				res.redirect("/");
+			})
+			.catch(error => console.log(error))
 		} else {
-            res.send(errors)
+            res.render("users/register", {
+				title: "Registro",
+				errors : errors.mapped(),
+				old : req.body,
+			});
         }
 	},
 	login: (req, res) => {
@@ -51,21 +48,23 @@ module.exports = {
 	processLogin: (req, res) => {
 		const errors = validationResult(req);
 		if (errors.isEmpty()) {
-			const { id, nombre, apellido, rol, avatar } = users.find(
-				(user) => user.email === req.body.email
-			);
-
-			req.session.user = {
-				id,
-				nombre,
-				apellido,
-				rol,
-				avatar,
-			};
-			if (req.body.recordar) {
-				res.cookie('concesionarias', req.session.user, { maxAge : 10000} )
-			}
-			res.redirect("/");
+			
+			Usuario.findOne({
+				where : {email : req.body.email}
+			})
+			.then(usuario => {
+				req.session.user = {
+					nombre: usuario.nombre,
+					apellido :usuario.apellido,
+					rol : usuario.rol,
+					avatar : usuario.avatar,
+				};
+				if (req.body.recordar) {
+					res.cookie('concesionarias', req.session.user, { maxAge : 10000} )
+				}
+				res.redirect("/");
+			})
+			.catch(error => console.log(error))
 		} else {
 			res.render("users/login", {
 				title: "Login",

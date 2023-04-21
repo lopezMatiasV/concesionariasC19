@@ -1,5 +1,5 @@
 const { check, body } = require("express-validator");
-const { users } = require("../data");
+const { Usuario } = require('../database/models')
 
 module.exports = [
     check("nombre")
@@ -20,8 +20,19 @@ module.exports = [
 		.bail()
 		.isEmail()
 		.withMessage("Debes ingresar un email válido"),
+	body('email')
+        .custom(value => {
+            return Usuario.findOne({
+                where : { email : value}
+            })
+            .then(user => {
+                if(user){
+                    return Promise.reject('el email ya esta registrado')
+                }
+            })
+        }),
     check("pass").notEmpty().withMessage("Ingresa tu password").bail(),
-    check("pass2").notEmpty().withMessage("Ingresa tu password").bail()
+    check("pass2").notEmpty().withMessage("Reingresa tu password").bail()
         .custom((value, {req}) => {
             return value === req.body.pass
         })

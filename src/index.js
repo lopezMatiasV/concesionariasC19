@@ -8,7 +8,7 @@ const cookieParser = require("cookie-parser");
 const { isAdmin, localsSession, cookieCheck } = require("./middlewares/user");
 
 //ENRUTADORES
-const { homeRouter, sucursalesRouter, autoRouter, adminAutosRouter, adminSucursalesRouter, userRouter } = require('./routes')
+const { homeRouter, sucursalesRouter, autoRouter, adminAutosRouter, adminSucursalesRouter, userRouter, adminUsuariosRouter } = require('./routes')
 
 //VISTAS
 app.set("views", path.join(__dirname, "views"));
@@ -38,6 +38,7 @@ app.use("/autos", autoRouter);
 app.use("/admin/sucursales", /* isAdmin, */ adminSucursalesRouter);
 app.use("/admin/autos", /* isAdmin, */ adminAutosRouter);
 app.use("/users", userRouter);
+app.use("/admin/usuarios", adminUsuariosRouter)
 
 app.listen(port, () => {
 	console.log(

@@ -19,10 +19,15 @@
             <a class="nav-link" href="/admin/usuarios">Usuarios</a>
           </li>
         </ul>
-        <form class="d-flex" action="/search" method="GET">
-          <input class="form-control me-2" type="search" placeholder="Busca tu marca favorita" name="search" aria-label="Search">
+        <div>
+          <small>Filtra autos por marca, modelo color o año</small>
+          <form class="d-flex" action="/admin/autos/search" method="GET">
+          <input class="form-control me-4" type="search" placeholder="Ingresa el parametro" name="search" aria-label="Search">
           <button class="btn btn-outline-success" type="submit">Search</button>
         </form>
+        
+        </div>
+        
       </div>
     </div>
   </nav>

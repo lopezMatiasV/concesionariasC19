@@ -31,7 +31,7 @@
                 </div>
                 <div class="col-12">
                     <label for="inputTel" class="form-label">Teléfono</label>
-                    <input type="tel" class="form-control" id="inputTel" name="telefono" value="<%= user.telefono %>">
+                    <input type="number" class="form-control" id="inputTel" name="telefono" value="<%= user.telefono %>">
                     <small class="text-danger"></small>
                 </div>
                 <div class="col-12">
@@ -46,6 +46,10 @@
                 <div class="col-12">
                     <button type="submit" class="btn btn-primary">Modificar</button>
                 </div>
+            </form>
+            <hr>
+            <form class="row g-3" action="/users/delete/<%= user.id%>?_method=DELETE" method="POST">
+                <button type="submit" class="btn btn-danger">Eliminarme</button>
             </form>
         </div>
     </main>

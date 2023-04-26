@@ -19,7 +19,7 @@ module.exports = {
 			});
 			const { nombre, apellido, email, pass } = req.body;
 			const newUser = {
-				id : lastId + 1,
+				id: lastId + 1,
 				nombre,
 				apellido,
 				email,
@@ -27,21 +27,19 @@ module.exports = {
 				avatar: req.file?.filename ?? "default-image.png",
 				rol: "user",
 			};
-			/* levanto sesion al registrar */
 			req.session.user = {
-				id : newUser.id,
-				nombre : newUser.nombre,
-				apellido : newUser.apellido,
-				rol : newUser.rol,
-				avatar : newUser.avatar,
+				id: newUser.id,
+				nombre: newUser.nombre,
+				apellido: newUser.apellido,
+				rol: newUser.rol,
+				avatar: newUser.avatar,
 			};
-
 			users.push(newUser);
 			writeJsonUsers(users);
 			res.redirect("/");
 		} else {
-            res.send(errors)
-        }
+			res.send(errors);
+		}
 	},
 	login: (req, res) => {
 		res.render("users/login", {
@@ -54,7 +52,6 @@ module.exports = {
 			const { id, nombre, apellido, rol, avatar } = users.find(
 				(user) => user.email === req.body.email
 			);
-
 			req.session.user = {
 				id,
 				nombre,
@@ -63,7 +60,7 @@ module.exports = {
 				avatar,
 			};
 			if (req.body.recordar) {
-				res.cookie('concesionarias', req.session.user, { maxAge : 10000} )
+				res.cookie("concesionarias", req.session.user, { maxAge: 10000 });
 			}
 			res.redirect("/");
 		} else {
@@ -79,26 +76,26 @@ module.exports = {
 		req.session.destroy();
 		res.redirect("/");
 	},
-	perfil : (req, res) => {
-		const user = users.find(user => user.id === req.session.user.id)
-		res.render('users/profile', {
-			user, 
-			title : `Perfil de ${user.nombre}`,
-		})
+	perfil: (req, res) => {
+		const user = users.find((user) => user.id === req.session.user.id);
+		res.render("users/profile", {
+			user,
+			title: `Perfil de ${user.nombre}`,
+		});
 	},
-	editPerfil : (req, res) => {
-		let { id } = req.params
-		let user = users.find(user => user.id == id)
-		users.forEach(user => {
+	editPerfil: (req, res) => {
+		let { id } = req.params;
+		let user = users.find((user) => user.id == id);
+		users.forEach((user) => {
 			if (user.id == id) {
-				user.nombre = req.body.nombre,
-				user.apellido = req.body.apellido,
-				user.direccion = req.body.direccion,
-				user.telefono = req.body.telefono,
-				user.avatar = req.file ? req.file.filename : user.avatar
+				(user.nombre = req.body.nombre),
+					(user.apellido = req.body.apellido),
+					(user.direccion = req.body.direccion),
+					(user.telefono = req.body.telefono),
+					(user.avatar = req.file ? req.file.filename : user.avatar);
 			}
-		})
+		});
 		writeJsonUsers(users);
-		res.redirect('/users/perfil');
-	}
+		res.redirect("/users/perfil");
+	},
 };

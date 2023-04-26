@@ -11,7 +11,7 @@ const {
 const loginValidator = require("../validations/loginValidator");
 const registerValidator = require("../validations/registerValidator");
 const { inSession, offSession } = require("../middlewares/user");
-const upload = require('../middlewares/uploadFile')
+const upload = require("../middlewares/uploadFile");
 
 router
 	.get("/login", inSession, login)
@@ -20,6 +20,6 @@ router
 	.post("/register", registerValidator, processRegister)
 	.get("/logout", logOut)
 	.get("/perfil", offSession, perfil)
-	.put("/perfil/:id", upload.single('avatar'), editPerfil);
+	.put("/perfil/:id", upload.single("avatar"), editPerfil);
 
 module.exports = router;

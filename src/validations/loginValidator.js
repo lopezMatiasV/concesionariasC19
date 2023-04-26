@@ -21,7 +21,7 @@ module.exports = [
 		.custom((value, { req }) => {
 			const user = users.find((user) => user.email === req.body.email);
 			//return user.pass === value;
-            return bcrypt.compareSync(value, user.pass)
+			return bcrypt.compareSync(value, user.pass);
 		})
 		.withMessage("Pass incorrecto"),
 ];

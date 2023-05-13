@@ -17,7 +17,7 @@ module.exports = {
                     total : sucursales.length,
                     status : 200,
                 },
-                data : sucursales,
+                sucursales,
             })
         } catch (error) {
             console.log(error);
@@ -50,10 +50,9 @@ module.exports = {
                     total_autos : sucursal.autos.length,
                     status : 200,
                 },
-                data : sucursal,
+                sucursal,
             })
         } catch (error) {
-            console.log(error);
             return res.status(404).json({
                 meta : {
                     status : 404,
@@ -62,13 +61,100 @@ module.exports = {
             })
         }
     },
-    create : (req, res) => {
-
+    create : async (req, res) => {
+        let errors = validationResult(req)
+        if(errors.isEmpty()){
+            try {
+                let sucursal = await Sucursal.create({
+                    ...req.body
+                })
+                return res.status(201).json({
+                    meta: {
+                        endPoint: getUrl(req) + `/${sucursal.id}`,
+                        msg: "Sucursal agregada",
+                    },
+                    data: sucursal,
+                });
+            } catch (error) {
+                console.log(error)
+                return res.status(404).json({
+                    meta: {
+                        status: 404,
+                        msg: error,
+                    },
+                });
+            }
+        } else {
+            return res.status(400).json({
+                msj : errors.mapped()
+            })
+        }
     },
-    update : (req, res) => {
-
+    update : async (req, res) => {
+        let errors = validationResult(req);
+        let { id } = req.params;
+        if(isNaN(id)) {
+            return res.status(404).json({
+                meta : {
+                    status : 404,
+                    msg : `Parametro invalido : ${id}`,
+                }
+            })
+        }
+        if(errors.isEmpty()){
+            let sucursal = await Sucursal.findByPk(id);
+            try {
+                if(!sucursal) throw `Sin cambios, el ${id} no existe`;
+                    Sucursal.update(
+                        {...req.body},
+                        { where: { id }},
+                    )
+                    return res.status(201).json({
+                        msg : `Sucursal con el id:${sucursal.id} actualizada correctamente`,
+                    })
+            } catch (error) {
+                return res.status(404).json({
+                    meta: {
+                        status: 404,
+                        msg: error,
+                    },
+                });
+            }
+        }else{
+            return res.status(404).json({
+                meta: {
+                    status: 404,
+                    msg: errors.mapped(),
+                },
+            });
+        }
     },
-    destroy : (req, res) => {
-
+    destroy : async (req, res) => {
+        let { id } = req.params;
+        if(isNaN(id)) {
+            return res.status(404).json({
+                meta : {
+                    status : 404,
+                    msg : `Parametro invalido : ${id}`,
+                }
+            })
+        }
+        let sucursal = await Sucursal.findByPk(id);
+        try {
+            if(!sucursal) throw `Sin cambios, el ${id} no existe`;
+            Sucursal.destroy({
+                where : {id}
+            })
+            return res.status(201).json({
+                msg : `Sucursal con el id: ${id} borrada correctamente`,
+            })
+        } catch (error) {
+            return res.status(404).json({
+                meta: {
+                    status: 404,
+                    msg: error,
+                },
+            });
+        }
     }
 }

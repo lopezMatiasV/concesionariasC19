@@ -7,6 +7,7 @@ const adminUsuariosRouter = require("./adminUsuarios");
 const userRouter = require("./users");
 const apiSucursales = require("./apiSucursales");
 const apiUsers = require("./apiUsers");
+const apiAutos = require("./apiAutos")
 
 module.exports = {
 	homeRouter,
@@ -18,4 +19,5 @@ module.exports = {
 	userRouter,
 	apiSucursales,
 	apiUsers,
+	apiAutos,
 };

@@ -19,6 +19,7 @@ const {
 	adminUsuariosRouter,
 	apiSucursales,
 	apiUsers,
+	apiAutos,
 } = require("./routes");
 
 //VISTAS
@@ -58,6 +59,7 @@ app.use("/users", userRouter);
 app.use("/admin/usuarios", adminUsuariosRouter);
 app.use("/apis/sucursales", apiSucursales);
 app.use("/apis/users", apiUsers);
+app.use('/apis/autos', apiAutos)
 
 app.listen(port, () => {
 	console.log(

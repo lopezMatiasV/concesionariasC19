@@ -25,6 +25,34 @@ module.exports = {
         }
     },
     one : async (req, res) => {
-        
-    }
+        const { id } = req.params;
+        if(isNaN(id)) {
+            return res.status(404).json({
+                meta : {
+                    status : 404,
+                    msg : `Parametro invalido : ${id}`,
+                }
+            })
+        }
+        try {
+            const user = await Usuario.findByPk(id, {
+                attributes : [ "id", "nombre", "apellido", "email" ]
+            })
+            if(!user) throw 'No encontrado';
+            return res.status(200).json({
+                meta : {
+                    endPoint: getUrl(req),
+                    status : 200,
+                },
+                user,
+            })
+        } catch (error) {
+            return res.status(404).json({
+                meta : {
+                    status : 404,
+                    msg : error,
+                }
+            })
+        }
+    },
 }

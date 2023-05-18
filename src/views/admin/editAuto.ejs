@@ -1,24 +1,27 @@
 <!DOCTYPE html>
 <html lang="es">
-    <%- include('../partials/head.ejs')  %> 
+    <%- include('../partials/head.ejs')  %>
+    <script src="/javascript/formValidators/autoValidator.js"></script> 
 <body>
     <%- include('../partials/headerAdmin.ejs')  %> 
     <main class="container">
         <h3 class="text-center">Editar <%- auto.marca + ' ' + auto.modelo%></h3>
         <div class="container col-md-4">
-            <form class="row g-3" action="/admin/autos/editar/<%- auto.id %>?_method=PUT" method="POST" enctype="multipart/form-data">
+            <form class="row g-3" id="form" action="/admin/autos/editar/<%- auto.id %>?_method=PUT" method="POST" enctype="multipart/form-data">
                 <div class="col-12">
                     <label for="inputName" class="form-label">Marca</label>
-                    <input type="text" class="form-control" id="inputName" name="marca" value="<%= locals.old?.marca ?? auto.marca %>">
-                    <small class="text-danger"><%= locals.errors?.marca?.msg ?? "" %></small>
+                    <input type="text" class="form-control" id="marca" name="marca" value="<%= locals.old?.marca ?? auto.marca %>">
+                    <small class="text-danger" id="errorMarca"><%= locals.errors?.marca?.msg ?? "" %></small>
                 </div>
                 <div class="col-12">
                     <label for="inputAddress" class="form-label">Modelo</label>
-                    <input type="text" class="form-control" id="inputAddress" name="modelo" value="<%= auto.modelo %>">
+                    <input type="text" class="form-control" id="modelo" name="modelo" value="<%= locals.old?.modelo ?? auto.modelo %>">
+                    <small class="text-danger" id="errorModelo"><%= locals.errors?.modelo?.msg ?? "" %></small>
                 </div>
                 <div class="col-12">
                     <label for="inputTel" class="form-label">Año</label>
-                    <input type="number" class="form-control" id="inputTel" name="anio" value="<%= auto.anio %>">
+                    <input type="number" class="form-control" id="anio" name="anio" value="<%= locals.old?.anio ?? auto.anio %>">
+                    <small class="text-danger" id="errorAnio"><%= locals.errors?.anio?.msg ?? "" %></small>
                 </div>
                 <div class="col-12">
                     <label for="inputTel" class="form-label">Sucursal</label>
@@ -30,10 +33,12 @@
                             <% } %>
                         <% }) %>
                     </select>
+                    <small class="text-danger" id="errorSucursal"></small>
                 </div>
                 <div class="col-12">
                     <label for="inputTel" class="form-label">Color</label>
-                    <input type="text" class="form-control" id="inputTel" name="color" value="<%= auto.color %>">
+                    <input type="text" class="form-control" id="color" name="color" value="<%= locals.old?.color ?? auto.color %>">
+                    <small class="text-danger" id="errorColor"><%= locals.errors?.color?.msg ?? "" %></small>
                 </div>
                 <!-- Image preview -->
                 <div id="imagePreview">
@@ -46,7 +51,9 @@
                         </figure>
                     <% }) %>
                     <input type="file" multiple class="form-control" id="inputFile" name="imagen"/>
+                    <small class="text-danger" id="errorImagen"><%= locals.errors?.image?.msg ?? "" %></small>
                 </div>
+                <small class="text-danger" id="errorForm"></small>
                 <div class="col-12">
                     <button type="submit" class="btn btn-primary">Editar</button>
                 </div>

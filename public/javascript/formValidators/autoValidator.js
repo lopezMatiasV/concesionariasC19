@@ -9,6 +9,7 @@ window.addEventListener("load", () => {
 	let sucursal = qs("#sucursal");
 	let imagen = qs("#inputFile");
 	let regExExtensions = /(.jpg|.jpeg|.png|.gif)$/i;
+	let carImages = qs('#carImages')
 
 	marca.addEventListener("blur", () => {
 		switch (true) {
@@ -97,7 +98,7 @@ window.addEventListener("load", () => {
 	imagen.addEventListener("change", () => {
 		switch (true) {
 			case !regExExtensions.exec(imagen.value):
-				errorImagen.innerHTML = "Archivo no permitido";
+				errorImagen.innerHTML = "No permitido, selecciona otro/s archivo ";
 				imagen.classList.add("is-invalid");
 				imagen.value = "";
 				break;
@@ -108,8 +109,22 @@ window.addEventListener("load", () => {
 				break;
 		}
 	});
+	imagen.addEventListener("change", () => {
+		if(carImages) {
+			carImages.innerHTML = ""
+		}
+		let imagenes = Object.values(imagen.files)
+			imagenes.forEach((imagen, i) => {
+				let reader = new FileReader();
+				reader.onload = function (e) {
+					imagePreview.innerHTML += '<img style="" src="' + e.target.result + '" width="70px" height="70px"/>';
+				};
+				reader.readAsDataURL(imagen);
+			})
+	});
 	
 	form.addEventListener("submit", (e) => {
+		console.log(imagen.files);
 		let errors = false;
 		e.preventDefault();
 		let elementosForm = form.elements;

@@ -1,20 +1,9 @@
-//const { Sucursal } = require('../database/models');
+const { Sucursal } = require('../database/models');
 const url = "http://localhost:3000/apis/sucursales/";
 
 module.exports = {
     sucursales : async (req, res) => {
-        fetch(url)
-        .then(response => {
-            response.json()
-            .then(sucursales => {
-                res.render('sucursales/sucursales', {
-                    title: 'Sucursales',
-                    sucursales : sucursales.data,
-                })
-            })
-        })
-        .catch(error => console.log(error))
-        /* Sucursal.findAll()
+        Sucursal.findAll()
         .then(sucursales =>{
             res.render('sucursales/sucursales', {
                 title: 'Sucursales',
@@ -24,22 +13,22 @@ module.exports = {
         .catch(error => {
             console.log(error);
             res.send('Hubo un error')
-        }) */
-    },
-    sucursal : (req, res) => {
-        const { id } = req.params;
-        fetch(url + id)
+        })
+        /* fetch(url)
         .then(response => {
             response.json()
-            .then(sucursal => {
-                res.render('sucursales/sucursal', {
-                    sucursal : sucursal.data,
-                    title: sucursal.data.nombre,
-                    autos : sucursal.data.autos,
+            .then(result => {
+                res.render('sucursales/sucursales', {
+                    title: 'Sucursales',
+                    sucursales : result.sucursales,
                 })
             })
         })
-        /* Sucursal.findByPk(id, {
+        .catch(error => console.log(error)) */
+    },
+    sucursal : (req, res) => {
+        const { id } = req.params;
+        Sucursal.findByPk(id, {
             include:[{association : 'autos', include : {association : 'imagenes'}}]
         })
         .then(sucursal => {
@@ -47,6 +36,17 @@ module.exports = {
                 sucursal,
                 title: sucursal.nombre,
                 autos : sucursal.autos,
+            })
+        }).catch(error => console.log(error))
+        /* fetch(url + id)
+        .then(response => {
+            response.json()
+            .then(result => {
+                res.render('sucursales/sucursal', {
+                    sucursal : result.sucursal,
+                    title: result.sucursal.nombre,
+                    autos : result.sucursal.autos,
+                })
             })
         }) */
     }

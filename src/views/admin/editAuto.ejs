@@ -41,18 +41,22 @@
                     <small class="text-danger" id="errorColor"><%= locals.errors?.color?.msg ?? "" %></small>
                 </div>
                 <!-- Image preview -->
-                <div id="imagePreview">
+                <div id="imagePreview" class="container d-flex flex-wrap justify-content-center" id="carImages" style="gap:20px">
                 </div>
-                
-                <div class="container d-flex flex-wrap justify-content-center" style="gap:20px">
+                <!-- Fin Image preview -->
+                <div class="container d-flex flex-wrap justify-content-center" id="carImages" style="gap:20px">
                     <% auto.imagenes.forEach(imagen => { %>
                         <figure class="text-center">
                             <img src="/images/<%= imagen.file %>" alt="" width="70px" height="70px">
                         </figure>
                     <% }) %>
+                </div>
+                <div class="col-12">
+                    <label for="inputFile" class="form-label">Imagen</label>
                     <input type="file" multiple class="form-control" id="inputFile" name="imagen"/>
                     <small class="text-danger" id="errorImagen"><%= locals.errors?.image?.msg ?? "" %></small>
                 </div>
+                
                 <small class="text-danger" id="errorForm"></small>
                 <div class="col-12">
                     <button type="submit" class="btn btn-primary">Editar</button>

@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="es">
-    <%- include('../partials/head.ejs')  %> 
+    <%- include('../partials/head.ejs')  %>
+    <script src="/javascript/formValidators/sucursalValidator.js"></script>
 <body>
     <%- include('../partials/headerAdmin.ejs')  %> 
     <main class="container">
         <h3 class="text-center">Agregar sucursal</h3>
         <div class="container col-md-4">
-            <form class="row g-3" action="/admin/sucursales/create" method="POST" enctype="multipart/form-data">
+            <form class="row g-3" id="form" action="/admin/sucursales/create" method="POST" enctype="multipart/form-data">
                 <div class="col-12">
                     <label for="inputName" class="form-label">Nombre</label>
                     <input type="text" class="form-control" id="inputName" name="nombre" value="<%= locals.old?.nombre ?? "" %>">
@@ -27,9 +28,10 @@
                 
                 <div class="col-12">
                     <label for="inputFile" class="form-label">Imagen</label>
-                    <input type="file" class="form-control" id="inputFile" name="imagen"/>
+                    <input type="file" class="form-control" id="imagen" name="imagen"/>
                 </div>
-                <small class="text-danger" id="errorimagen"><%= locals.errors?.imagen ? errors.imagen.msg : "" %></small>
+                <small class="text-danger" id="errorImagen"><%= locals.errors?.imagen ? errors.imagen.msg : "" %></small>
+                <small class="text-danger" id="errorForm"></small>
                 <div class="col-12">
                     <button type="submit" class="btn btn-primary">AGREGAR</button>
                 </div>

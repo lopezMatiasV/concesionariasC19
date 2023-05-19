@@ -4,7 +4,9 @@ const getUrl = (req) => req.protocol + '://' + req.get('host') + req.originalUrl
 module.exports = {
     all : async (req, res) => {
         try {
-            let users = await Usuario.findAll()
+            let users = await Usuario.findAll({
+                attributes : [ "id", "nombre", "apellido", "email" ]
+            })
             if(users.length == 0) throw 'No hay usuarios';
             return res.status(200).json({
                 meta : {

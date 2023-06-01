@@ -3,6 +3,7 @@ const { validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const fs = require("fs");
 const path = require("path");
+const sendEmail = require('../helpers/nodemailer')
 
 module.exports = {
 	register: (req, res) => {
@@ -23,6 +24,8 @@ module.exports = {
 				rol: "user",
 			})
 				.then((usuario) => {
+					/* Envio de email con nodemailer */
+					sendEmail(usuario)
 					/* levanto sesion al registrar */
 					req.session.user = {
 						id: usuario.id,
